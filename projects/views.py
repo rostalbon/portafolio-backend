@@ -29,3 +29,13 @@ class ProjectDetailView(ApiView):
             )
         project.delete()
         return Response(status=204)
+    def get(self, request, pk):
+        try:
+            project = ProjectsTable.objects.get(pk=pk)
+        except ProjectsTable.DoesNotExist:
+            return Response(
+                {"error": "Proyecto no encontrado."},
+                status=404
+            )
+        serializer = ProjectSerializer(project)
+        return Response(serializer.data, status=200)
