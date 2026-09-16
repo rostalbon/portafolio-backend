@@ -8,17 +8,6 @@ from projects.serializers import ProjectSerializer
 
 class ProjectView(ApiView):
     def get(self, request):
-        project_id = request.data.get("id")
-        if project_id:
-            try:
-                project = ProjectsTable.objects.get(pk=project_id)
-                serializer = ProjectSerializer(project)
-                return Response(serializer.data, status=200)
-            except ProjectsTable.DoesNotExist:
-                return Response(
-                    {"error": "Proyecto no encontrado."},
-                    status=404
-                )
         projects = ProjectsTable.objects.all()
         serializer = ProjectSerializer(projects, many=True)
         return Response(serializer.data, status=200)
