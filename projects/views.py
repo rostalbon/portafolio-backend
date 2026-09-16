@@ -28,19 +28,15 @@ class ProjectView(ApiView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-    def delete(self, request):
-        project_id = request.data.get("id")
-        if not project_id:
-            return Response(
-                {"error": "Se requiere el ID para eliminar."},
-                status=400
-            )
+    
+class ProjectDetailView(ApiView):
+    def delete(self, request, pk):
         try:
-            project = ProjectsTable.objects.get(pk=project_id)
+            project = ProjectsTable.objects.get(pk=pk)
         except ProjectsTable.DoesNotExist:
             return Response(
-                {"error": "Proyecto no encontrado."},
-                status=404
+                {"error": "Proyecto no encontrado"},
+                status=404,
             )
         project.delete()
         return Response(status=204)
